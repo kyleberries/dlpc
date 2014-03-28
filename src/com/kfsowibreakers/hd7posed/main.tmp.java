@@ -71,37 +71,7 @@ public class Main implements IXposedHookLoadPackage, IXposedHookZygoteInit
     	{
     		log( t );
     	}
-        
-        // wallpaper fix
-        try
-		{
-        	XResources.setSystemWideReplacement( "android", "bool", "disable_system_wallpapers", false );
-        	log( "framework-res: disable_system_wallpapers hooked" );  
-		}
-        catch (Throwable t) 
-        {
-        	log( t );
-        }
-	}
-	
-	@Override
-	public void handleLoadPackage( final LoadPackageParam lpparam ) throws Throwable 
-    {
-		// prevent ota update
-		if( lpparam.packageName.equals( "com.android.settings" ) )
-    	{
-	        try
-			{
-	        	final Class<?> cls = findClass( "com.android.settings.services.SystemUpdatesService", lpparam.classLoader );
-	    		Method m = findMethodBestMatch( cls, "initOTAController" );
-	    		XposedBridge.hookMethod( m, XC_MethodReplacement.DO_NOTHING );
-	    		log( cls.getName()+"."+m.getName()+" hooked" );  
-			}
-	    	catch ( Throwable t ) 
-	    	{
-	    		log( t );
-	    	}
-    	}
+     
 		
 		// DownloadProvider fix (play store, gmail... downloads)
         // Prevent any call to DownloadProvider.checkInsertPermissions

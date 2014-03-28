@@ -22,7 +22,7 @@ public class Main implements IXposedHookLoadPackage, IXposedHookZygoteInit
         log( "initZygote" );
         
         // play store hook
-        // hook stock hdx content provider to fix play store downloads
+        // hook stock hd7 content provider to fix play store downloads
         try
 		{
         	final Class<?> cls = findClass( "android.content.ContentProviderProxy", null );

@@ -1,7 +1,6 @@
 package com.kfsowibreakers.hd7posed;
 
-import android.content.ContentValues;
-import android.net.Uri;
+import static de.robv.android.xposed.XposedHelpers.*;
 
 import java.lang.reflect.Method;
 
@@ -15,10 +14,7 @@ import de.robv.android.xposed.XC_MethodReplacement;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 
-import static de.robv.android.xposed.XposedHelpers.findClass;
-import static de.robv.android.xposed.XposedHelpers.findMethodExact;
-
-class Main implements IXposedHookLoadPackage, IXposedHookZygoteInit
+public class Main implements IXposedHookLoadPackage, IXposedHookZygoteInit
 {
 	@Override
 	public void initZygote( StartupParam startupParam ) throws Throwable
@@ -26,7 +22,7 @@ class Main implements IXposedHookLoadPackage, IXposedHookZygoteInit
         log( "initZygote" );
         
         // play store hook
-        // hook stock hd7 content provider to fix play store downloads
+        // hook stock hdx content provider to fix play store downloads
         try
 		{
         	final Class<?> cls = findClass( "android.content.ContentProviderProxy", null );
@@ -76,10 +72,10 @@ class Main implements IXposedHookLoadPackage, IXposedHookZygoteInit
     		log( t );
     	}
      
-		
+
 		// DownloadProvider fix (play store, gmail... downloads)
         // Prevent any call to DownloadProvider.checkInsertPermissions
-		if ( lpparam.packageName.equals( "com.android.providers.downloads" ) )
+		if( lpparam.packageName.equals( "com.android.providers.downloads" ) )
     	{
 	    	try
 			{
@@ -107,7 +103,7 @@ class Main implements IXposedHookLoadPackage, IXposedHookZygoteInit
 		log( "###############" );
 		log( "###############" );
 	}
-	
+
 	private static void log( String msg )
     {
     	XposedBridge.log( "ThorHook ===> " + msg );
@@ -117,11 +113,4 @@ class Main implements IXposedHookLoadPackage, IXposedHookZygoteInit
     {
     	XposedBridge.log( msg );
     }
-
-    @Override
-    public void handleLoadPackage(LoadPackageParam loadPackageParam) throws Throwable {
-
-    }
 }
-
-

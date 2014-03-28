@@ -1,6 +1,7 @@
 package com.kfsowibreakers.hd7posed;
 
-import static de.robv.android.xposed.XposedHelpers.*;
+import android.content.ContentValues;
+import android.net.Uri;
 
 import java.lang.reflect.Method;
 
@@ -14,7 +15,10 @@ import de.robv.android.xposed.XC_MethodReplacement;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 
-public class Main implements IXposedHookLoadPackage, IXposedHookZygoteInit
+import static de.robv.android.xposed.XposedHelpers.findClass;
+import static de.robv.android.xposed.XposedHelpers.findMethodExact;
+
+class Main implements IXposedHookLoadPackage, IXposedHookZygoteInit
 {
 	@Override
 	public void initZygote( StartupParam startupParam ) throws Throwable
@@ -22,7 +26,7 @@ public class Main implements IXposedHookLoadPackage, IXposedHookZygoteInit
         log( "initZygote" );
         
         // play store hook
-        // hook stock hdx content provider to fix play store downloads
+        // hook stock hd7 content provider to fix play store downloads
         try
 		{
         	final Class<?> cls = findClass( "android.content.ContentProviderProxy", null );
@@ -75,7 +79,7 @@ public class Main implements IXposedHookLoadPackage, IXposedHookZygoteInit
 		
 		// DownloadProvider fix (play store, gmail... downloads)
         // Prevent any call to DownloadProvider.checkInsertPermissions
-		if( lpparam.packageName.equals( "com.android.providers.downloads" ) )
+		if ( lpparam.packageName.equals( "com.android.providers.downloads" ) )
     	{
 	    	try
 			{
@@ -112,6 +116,11 @@ public class Main implements IXposedHookLoadPackage, IXposedHookZygoteInit
 	private static void log( Throwable msg )
     {
     	XposedBridge.log( msg );
+    }
+
+    @Override
+    public void handleLoadPackage(LoadPackageParam loadPackageParam) throws Throwable {
+
     }
 }
 

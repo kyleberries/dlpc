@@ -1,4 +1,4 @@
-package fr.mydedibox.hdxposed;
+package com.kfsowibreakers.hd7posed;
 
 import static de.robv.android.xposed.XposedHelpers.*;
 
